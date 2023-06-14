@@ -18,11 +18,9 @@ import java.util.List;
 public class MenuController {
     @Autowired
     private MenuImpl menu;
-    @PostMapping("/restaurant/menuAdd")
-    public String add(@RequestBody MenuDto menuDto) {
+    @PostMapping("/addMenu")
+    public String add(@RequestBody List<MenuDto> menuDto) {
         menu.add(menuDto);
         return "Saved";
     }
-
-
 }

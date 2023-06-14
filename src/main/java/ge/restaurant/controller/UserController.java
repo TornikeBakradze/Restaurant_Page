@@ -14,7 +14,6 @@ public class UserController {
     private UserImpl user;
     @PostMapping("/EditProfile")
     public Users update(@RequestBody UserDto userDto) throws Exception {
-        System.out.println("helo");
         return user.update(userDto);
     }
 }

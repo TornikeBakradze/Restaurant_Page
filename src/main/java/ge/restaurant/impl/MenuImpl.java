@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class MenuImpl {
@@ -17,10 +19,12 @@ public class MenuImpl {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public void add(MenuDto menuDto){
-        Restaurant restaurant = restaurantRepository.findById(menuDto.getRestaurantID()).get();
-        Menu_Items menuItems = new Menu_Items(0L, menuDto.getName(),
-                menuDto.getDescription(), menuDto.getCategory(), menuDto.getPrice(), restaurant);
-        menuRepository.save(menuItems);
+    public void add(List<MenuDto> menuDto) {
+        Restaurant restaurant = restaurantRepository.findById(menuDto.get(0).getRestaurantID()).get();
+        for (MenuDto dto : menuDto) {
+            Menu_Items menuItems = new Menu_Items(0L, dto.getName(),
+                    dto.getDescription(), dto.getCategory(), dto.getPrice(), restaurant);
+            menuRepository.save(menuItems);
+        }
     }
 }

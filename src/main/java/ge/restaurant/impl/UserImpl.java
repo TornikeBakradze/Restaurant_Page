@@ -44,6 +44,23 @@ public class UserImpl implements UserService {
                 userDto.getPhoneNumber(), encPass, roles, addressesSet));
     }
 
+    public Users update(UserDto userDto) throws Exception {
+        Users users = userRepository.findById(userDto.getId()).orElse(null);
+        if(users!=null){
+            users.setUsername(userDto.getUserName());
+            users.setEmail(userDto.getEmail());
+            users.setLastname(userDto.getLastname());
+            users.setPhoneNumber(userDto.getPhoneNumber());
+            String encPass=registrationService.encodePassword(userDto.getPassword());
+            users.setPassword(encPass);
+            Set<Addresses> addressesSet =
+                    registrationService.addresses
+                            (userDto.getStreet(), userDto.getStreetNumber(),userDto.getDistrict());
+            users.setAddresses(addressesSet);
+            return userRepository.save(users);
+        }
+        throw  new Exception("Something went wrong");
+    }
 
     public boolean iseExist(String email) {
         return userRepository.findByEmail(email).isPresent();

@@ -10,12 +10,22 @@ public class RestaurantMainDto {
 
     private Set<String> types;
 
+    private Set<String> district;
     public RestaurantMainDto() {
     }
 
-    public RestaurantMainDto(List<AverageRating> averageRatingList, Set<String> types) {
+    public RestaurantMainDto(List<AverageRating> averageRatingList, Set<String> types, Set<String> district) {
         this.averageRatingList = averageRatingList;
         this.types = types;
+        this.district = district;
+    }
+
+    public Set<String> getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(Set<String> district) {
+        this.district = district;
     }
 
     public List<AverageRating> getAverageRatingList() {

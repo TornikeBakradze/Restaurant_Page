@@ -21,8 +21,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     @Query("SELECT DISTINCT r.type FROM Restaurant r")
     Set<String> findAllUniqueTypes();
 
-
-
-
-
+    @Query("Select distinct r.addresses.district from Restaurant r")
+    Set<String> getAllUniqueDistinct();
 }

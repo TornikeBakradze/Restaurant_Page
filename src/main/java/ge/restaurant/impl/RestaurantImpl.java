@@ -34,6 +34,7 @@ public class RestaurantImpl implements RestaurantService {
     @Autowired
     private AverageRatingRepository averageRatingRepository;
 
+
     @Override
     public Restaurant register(RestaurantDto restaurantDto) throws DataAlreadyExistException {
         if (iseExist(restaurantDto.getEmail())) {
@@ -59,32 +60,55 @@ public class RestaurantImpl implements RestaurantService {
         List<AverageRating> allRestaurantWithAverageRating =
                 averageRatingRepository.getAllRestaurantWithAverageRating();
         Set<String> allUniqueTypes = restaurantRepository.findAllUniqueTypes();
-        return new RestaurantMainDto(allRestaurantWithAverageRating, allUniqueTypes);
+        Set<String> allUniqueDistrict = restaurantRepository.getAllUniqueDistinct();
+        return new RestaurantMainDto(allRestaurantWithAverageRating, allUniqueTypes, allUniqueDistrict);
     }
 
     public List<AverageRating> getRestaurantByType(Set<String> type) {
         return averageRatingRepository.findRestaurantsByTypes(type);
     }
 
-    public List<AverageRating> getRestaurantByRating(String min,String max){
-        Float minRating=parseFloatOrDefault(min,0f);
-        Float maxRating=parseFloatOrDefault(max,5f);
-        return averageRatingRepository.findRatingsByAverageRatingRange(minRating,maxRating);
+    public List<AverageRating> getRestaurantByRating(String min, String max) {
+        Float minRating = parseFloatOrDefault(min, 0f);
+        Float maxRating = parseFloatOrDefault(max, 5f);
+        return averageRatingRepository.findRatingsByAverageRatingRange(minRating, maxRating);
     }
 
 
-    public List<AverageRating> getRestaurantByTypeAndRating(Set<String> type,String min,String max){
-        Float minRating=parseFloatOrDefault(min,0f);
-        Float maxRating=parseFloatOrDefault(max,5f);
-        return averageRatingRepository.findRestaurantsByTypesAndRating(type,minRating,maxRating);
+    public List<AverageRating> getRestaurantByDistrict(Set<String> district) {
+        return averageRatingRepository.findRestaurantsByDistrict(district);
     }
 
-    public EachRestaurantFullInfoDto restaurantFullInfo(String restaurantUrl){
+    public List<AverageRating> getRestaurantByTypeAndRating(Set<String> type, String min, String max) {
+        Float minRating = parseFloatOrDefault(min, 0f);
+        Float maxRating = parseFloatOrDefault(max, 5f);
+        return averageRatingRepository.findRestaurantsByTypesAndRating(type, minRating, maxRating);
+    }
+
+    public List<AverageRating> getRestaurantByTypeAndDistinct(Set<String> type,Set<String> distinct){
+        return averageRatingRepository.findRestaurantsByTypesAndDistinct(type,distinct);
+    }
+
+    public List<AverageRating> getRestaurantByDistinctAndRating(Set<String> distinct,String min, String max){
+        Float minRating = parseFloatOrDefault(min, 0f);
+        Float maxRating = parseFloatOrDefault(max, 5f);
+        return averageRatingRepository.findRestaurantsByDistinctAndRating(distinct,minRating,maxRating);
+    }
+
+    public List<AverageRating> getRestaurantBYTypeAndRatingAndDistinct
+            (Set<String> type, String min, String max, Set<String> distinct) {
+        Float minRating = parseFloatOrDefault(min, 0f);
+        Float maxRating = parseFloatOrDefault(max, 5f);
+        return averageRatingRepository.findRestaurantsByTypesAndRatingAndDistinct
+                (type, minRating, maxRating, distinct);
+    }
+
+    public EachRestaurantFullInfoDto restaurantFullInfo(String restaurantUrl) {
         Restaurant restaurant = restaurantRepository.findByRestaurantUrl(restaurantUrl).get();
         List<CommentDto> commentsByRestaurant = ratingRepository.findCommentsByRestaurant(restaurant);
         List<Menu_Items> menuByRestaurant = menuRepository.getMenuByRestaurant(restaurant);
         AverageRating restaurantAverageRating = averageRatingRepository.findByRestaurant(restaurant);
-        return new EachRestaurantFullInfoDto(restaurantAverageRating,menuByRestaurant,commentsByRestaurant);
+        return new EachRestaurantFullInfoDto(restaurantAverageRating, menuByRestaurant, commentsByRestaurant);
     }
 
     public boolean iseExist(String email) {

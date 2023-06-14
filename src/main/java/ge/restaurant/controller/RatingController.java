@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
+@RequestMapping("/restaurant")
 public class RatingController {
 
     @Autowired
@@ -28,7 +29,7 @@ public class RatingController {
     private RatingRepository ratingRepository;
 
 
-    @PostMapping("/restaurant/{restaurantUrl}/rating")
+    @PostMapping("/{restaurantUrl}/rating")
     public void addRating(@PathVariable("restaurantUrl") String restaurantUrl,
                           @RequestBody BasicRatingDto basicRatingDto) {
         if (basicRatingDto.getAmbienceRating() == -1) {
@@ -40,7 +41,7 @@ public class RatingController {
         }
     }
 
-    @PostMapping("/restaurant/{restaurantUrl}/comm")
+    @PostMapping("/{restaurantUrl}/comm")
     public void addComme(@PathVariable("restaurantUrl") String restaurantUrl, @RequestBody AddCommentDto addCommentDto) {
         Restaurant restaurant = restaurantRepository.findByRestaurantUrl(restaurantUrl).get();
         Users users = userRepository.findById(addCommentDto.getUserId()).get();

@@ -1,6 +1,7 @@
 package ge.restaurant.dto;
 
 public class UserDto {
+    private Long id;
     private String email;
     private String userName;
     private String lastname;
@@ -13,6 +14,19 @@ public class UserDto {
     private String role;
 
     public UserDto() {
+    }
+
+    public UserDto(Long id, String email, String userName, String lastname, String password, String phoneNumber, String street, String streetNumber, String district, String role) {
+        this.id = id;
+        this.email = email;
+        this.userName = userName;
+        this.lastname = lastname;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.street = street;
+        this.streetNumber = streetNumber;
+        this.district = district;
+        this.role = role;
     }
 
     public UserDto(String email, String userName,
@@ -29,6 +43,14 @@ public class UserDto {
         this.streetNumber = streetNumber;
         this.district = district;
         this.role = role;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDistrict() {

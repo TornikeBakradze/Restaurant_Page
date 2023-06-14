@@ -41,12 +41,36 @@ public interface AverageRatingRepository extends JpaRepository<AverageRating, Lo
             " IN :types order by  r.averageRating_Id DESC")
     List<AverageRating> findRestaurantsByTypes(@Param("types") Set<String> types);
 
+    @Query("Select r FROM AverageRating r WHERE r.restaurant.addresses.district IN :district")
+    List<AverageRating> findRestaurantsByDistrict(@Param("district")Set<String> district);
+
     @Query("SELECT r FROM AverageRating r WHERE r.restaurant.type" +
             " IN :types and r.averageRating >= :minRating " +
             "and r.averageRating <= :maxRating   order by  r.averageRating_Id DESC")
     List<AverageRating> findRestaurantsByTypesAndRating(@Param("types") Set<String> types,
                                                         @Param("minRating") Float minRating,
                                                         @Param("maxRating") Float maxRating);
+
+    @Query("SELECT r FROM AverageRating r WHERE r.restaurant.type" +
+            " IN :types and r.restaurant.addresses.district IN :distinct" +
+            " order by  r.averageRating_Id DESC")
+    List<AverageRating> findRestaurantsByTypesAndDistinct(@Param("types") Set<String> types,
+                                                          @Param("distinct")Set<String> distinct);
+
+    @Query("SELECT r FROM AverageRating r WHERE r.restaurant.addresses.district" +
+            " IN :distinct and r.averageRating >= :minRating " +
+            "and r.averageRating <= :maxRating   order by  r.averageRating_Id DESC")
+    List<AverageRating> findRestaurantsByDistinctAndRating(@Param("distinct") Set<String> distinct,
+                                                        @Param("minRating") Float minRating,
+                                                        @Param("maxRating") Float maxRating);
+
+    @Query("SELECT r FROM AverageRating r WHERE r.restaurant.type" +
+            " IN :types and r.averageRating >= :minRating " +
+            "and r.averageRating <= :maxRating and r.restaurant.addresses.district in :distinct   order by  r.averageRating_Id DESC")
+    List<AverageRating> findRestaurantsByTypesAndRatingAndDistinct(@Param("types") Set<String> types,
+                                                        @Param("minRating") Float minRating,
+                                                        @Param("maxRating") Float maxRating,
+                                                        @Param("distinct") Set<String> distinct);
 
     @Query("Select r from AverageRating r where r.restaurant=:restaurant")
     AverageRating findByRestaurant(@Param("restaurant")Restaurant restaurant);

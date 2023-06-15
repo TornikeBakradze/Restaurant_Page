@@ -15,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -29,19 +31,25 @@ public class UserImpl implements UserService {
 
 
     @Override
-    public Users register(UserDto userDto) throws DataAlreadyExistException {
-        if (iseExist(userDto.getEmail())) {
-            throw new DataAlreadyExistException("This Email is already used");
+    public List<Users> register(List<UserDto> userDtos) throws DataAlreadyExistException {
+        List<Users> users=new ArrayList<>();
+        for (UserDto userDto : userDtos) {
+
+            if (iseExist(userDto.getEmail())) {
+                throw new DataAlreadyExistException("This Email is already used");
+            }
+
+            String encPass = registrationService.encodePassword(userDto.getPassword());
+            Set<Role> roles = registrationService.role(userDto.getRole());
+            Set<Addresses> addressesSet =
+                    registrationService.addresses(userDto.getStreet(), userDto.getStreetNumber(),userDto.getDistrict());
+
+            Users users1 = userRepository.save(new Users(0L, userDto.getEmail(),
+                    userDto.getUserName(), userDto.getLastname(),
+                    userDto.getPhoneNumber(), encPass, roles, addressesSet));
+            users.add(users1);
         }
-
-        String encPass = registrationService.encodePassword(userDto.getPassword());
-        Set<Role> roles = registrationService.role(userDto.getRole());
-        Set<Addresses> addressesSet =
-                registrationService.addresses(userDto.getStreet(), userDto.getStreetNumber(),userDto.getDistrict());
-
-        return userRepository.save(new Users(0L, userDto.getEmail(),
-                userDto.getUserName(), userDto.getLastname(),
-                userDto.getPhoneNumber(), encPass, roles, addressesSet));
+        return users;
     }
 
     public Users update(UserDto userDto) throws Exception {

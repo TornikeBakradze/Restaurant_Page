@@ -12,6 +12,7 @@ import ge.restaurant.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -31,14 +32,13 @@ public class RatingController {
 
     @PostMapping("/{restaurantUrl}/rating")
     public void addRating(@PathVariable("restaurantUrl") String restaurantUrl,
-                          @RequestBody BasicRatingDto basicRatingDto) {
-        if (basicRatingDto.getAmbienceRating() == -1) {
-            ratingImpl.AddRating(restaurantUrl, basicRatingDto.getUserGeneralRating(), basicRatingDto.getUserid());
-        } else {
+                          @RequestBody List<BasicRatingDto> basicRatingDtos) {
+        for (BasicRatingDto basicRatingDto : basicRatingDtos) {
             ratingImpl.AddRating(restaurantUrl, basicRatingDto.getServiceRating(),
                     basicRatingDto.getFoodRating(), basicRatingDto.getPriceRating(),
                     basicRatingDto.getAmbienceRating(), basicRatingDto.getUserid());
         }
+
     }
 
     @PostMapping("/{restaurantUrl}/comm")

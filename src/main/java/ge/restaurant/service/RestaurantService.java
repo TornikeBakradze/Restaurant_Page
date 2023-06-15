@@ -9,5 +9,5 @@ import java.util.List;
 
 
 public interface RestaurantService {
-    Restaurant register(RestaurantDto restaurantDto) throws DataAlreadyExistException;
+    List<Restaurant> register(List<RestaurantDto> restaurantDto) throws DataAlreadyExistException;
 }

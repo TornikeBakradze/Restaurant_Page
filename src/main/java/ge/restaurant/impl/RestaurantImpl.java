@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,24 +37,28 @@ public class RestaurantImpl implements RestaurantService {
 
 
     @Override
-    public Restaurant register(RestaurantDto restaurantDto) throws DataAlreadyExistException {
-        if (iseExist(restaurantDto.getEmail())) {
-            throw new DataAlreadyExistException("This restaurant already exist");
+    public List<Restaurant> register(List<RestaurantDto> restaurantDtos) throws DataAlreadyExistException {
+        List<Restaurant> restaurants=new ArrayList<>();
+        for (RestaurantDto restaurantDto : restaurantDtos) {
+            if (iseExist(restaurantDto.getEmail())) {
+                throw new DataAlreadyExistException("This restaurant already exist");
+            }
+            String encPass = registrationService.encodePassword(restaurantDto.getPassword());
+            Set<Role> roleSet = registrationService.role(restaurantDto.getRole());
+            Addresses addresses = new Addresses(restaurantDto.getStreet(), restaurantDto.getStreetNumber(), restaurantDto.getDistrict());
+            Restaurant restaurant = restaurantRepository.save(new Restaurant(0L, restaurantDto.getEmail(), restaurantDto.getUserName(),
+                    restaurantDto.getType(), restaurantDto.getPhoneNumber(), encPass, roleSet, addresses));
+            Users user = userRepository.findById(1L).get();
+            Rating rating =
+                    new Rating(restaurant, user, 0f, null,
+                            0f, 0f, 0f, 0f);
+            AverageRating averageRating =
+                    new AverageRating(0f, 0f, 0f, 0f, 0f, restaurant);
+            averageRatingRepository.save(averageRating);
+            ratingRepository.save(rating);
+            restaurants.add(restaurant);
         }
-        String encPass = registrationService.encodePassword(restaurantDto.getPassword());
-        Set<Role> roleSet = registrationService.role(restaurantDto.getRole());
-        Addresses addresses = new Addresses(restaurantDto.getStreet(), restaurantDto.getStreetNumber(), restaurantDto.getDistrict());
-        Restaurant restaurant = restaurantRepository.save(new Restaurant(0L, restaurantDto.getEmail(), restaurantDto.getUserName(),
-                restaurantDto.getType(), restaurantDto.getPhoneNumber(), encPass, roleSet, addresses));
-        Users user = userRepository.findById(1L).get();
-        Rating rating =
-                new Rating(restaurant, user, 0f, null,
-                        0f, 0f, 0f, 0f);
-        AverageRating averageRating =
-                new AverageRating(0f, 0f, 0f, 0f, 0f, restaurant);
-        averageRatingRepository.save(averageRating);
-        ratingRepository.save(rating);
-        return restaurant;
+        return restaurants;
     }
 
     public RestaurantMainDto getAllRestaurant() {

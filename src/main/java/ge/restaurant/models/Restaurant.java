@@ -1,10 +1,9 @@
 package ge.restaurant.models;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import org.springframework.security.core.userdetails.UserDetails;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -47,6 +46,14 @@ public class Restaurant implements UserDetails {
     @Column(unique = true)
     private String restaurantUrl;
 
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "restaurantImage",
+            joinColumns = {@JoinColumn(name = "restaurant_id")},
+            inverseJoinColumns = {@JoinColumn(name = "image_id")}
+    )
+    private List<ImageData> images = new ArrayList<>();
+
 
     public Restaurant() {
     }
@@ -65,6 +72,14 @@ public class Restaurant implements UserDetails {
         this.authorities = authorities;
         this.addresses = addresses;
         this.restaurantUrl = username.replaceAll("\\s","")+"_"+addresses.getStreet().replaceAll("\\s","")+"_"+addresses.getStreet_number().replaceAll("\\s","");
+    }
+
+    public List<ImageData> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageData> images) {
+        this.images = images;
     }
 
     public Long getRestaurant_id() {

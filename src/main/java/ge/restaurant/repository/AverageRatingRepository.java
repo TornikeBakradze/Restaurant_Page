@@ -52,7 +52,7 @@ public interface AverageRatingRepository extends JpaRepository<AverageRating, Lo
                                                         @Param("maxRating") Float maxRating);
 
     @Query("SELECT r FROM AverageRating r WHERE r.restaurant.type" +
-            " IN :types and r.restaurant.addresses.district IN :distinct" +
+            " IN :types and  r.restaurant.addresses.district IN :distinct" +
             " order by  r.averageRating_Id DESC")
     List<AverageRating> findRestaurantsByTypesAndDistinct(@Param("types") Set<String> types,
                                                           @Param("distinct")Set<String> distinct);

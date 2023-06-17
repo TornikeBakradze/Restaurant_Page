@@ -9,6 +9,7 @@ import ge.restaurant.models.*;
 import ge.restaurant.repository.*;
 import ge.restaurant.service.RegistrationService;
 import ge.restaurant.service.RestaurantService;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +63,7 @@ public class RestaurantImpl implements RestaurantService {
     }
 
     public RestaurantMainDto getAllRestaurant() {
+
         List<AverageRating> allRestaurantWithAverageRating =
                 averageRatingRepository.getAllRestaurantWithAverageRating();
         Set<String> allUniqueTypes = restaurantRepository.findAllUniqueTypes();
@@ -126,4 +128,5 @@ public class RestaurantImpl implements RestaurantService {
         }
         return defaultValue;
     }
+
 }

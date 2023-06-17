@@ -26,6 +26,10 @@ public class Menu_Items {
     @JsonIgnore
     private Restaurant restaurant;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private ImageData imageData;
+
     public Menu_Items() {
     }
 
@@ -38,6 +42,22 @@ public class Menu_Items {
         this.category = category;
         this.price = price;
         this.restaurant = restaurant;
+    }
+
+    public Long getItem_id() {
+        return item_id;
+    }
+
+    public void setItem_id(Long item_id) {
+        this.item_id = item_id;
+    }
+
+    public ImageData getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(ImageData imageData) {
+        this.imageData = imageData;
     }
 
     public void setId(Long id) {

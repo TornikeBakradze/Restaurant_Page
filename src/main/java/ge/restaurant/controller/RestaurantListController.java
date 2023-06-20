@@ -22,7 +22,11 @@ public class RestaurantListController {
             @RequestParam(required = false) Set<String> type,
             @RequestParam(required = false) String min,
             @RequestParam(required = false) String max,
-            @RequestParam(required = false) Set<String> district){
+            @RequestParam(required = false) Set<String> district,
+            @RequestParam(required = false) String name){
+        if(name!=null){
+            return restaurant.findByName(name);
+        }
         if(type!=null&&(min!=null||max!=null)&&district!=null){
             return restaurant.getRestaurantBYTypeAndRatingAndDistinct(type,min,max,district);
         }

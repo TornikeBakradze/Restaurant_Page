@@ -59,6 +59,9 @@ public class RestaurantImpl implements RestaurantService {
         }
         return restaurants;
     }
+    public AverageRating findByName(String name){
+        return averageRatingRepository.findByName(name.toLowerCase());
+    }
 
     public RestaurantMainDto getAllRestaurant() {
 

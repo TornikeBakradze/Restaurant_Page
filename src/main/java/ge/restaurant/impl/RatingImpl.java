@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -58,6 +59,11 @@ public class RatingImpl implements RatingService {
                         updatedRating.get("FootRating"), updatedRating.get("PriceRating"),
                         updatedRating.get("AmbianceRating"), newAverageRating, restaurant);
         ratingRepository.save(rating1);
+    }
+
+    public List<Rating> getUserActivity(String id){
+        Long userId=Long.parseLong(id);
+        return ratingRepository.getUserActivity(userId);
     }
 
 }

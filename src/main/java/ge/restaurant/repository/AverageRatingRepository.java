@@ -78,7 +78,7 @@ public interface AverageRatingRepository extends JpaRepository<AverageRating, Lo
     @Query("Select r from AverageRating r where r.restaurant.restaurant_id in :rest")
     Set<AverageRating> recommended(List<Long> rest);
 
-    @Query("Select r from AverageRating  r where r.restaurant.username=:name")
-    AverageRating findByName(String name);
+    @Query("Select r from AverageRating  r where r.restaurant.username like %:name%")
+    List<AverageRating> findByName(String name);
 
 }

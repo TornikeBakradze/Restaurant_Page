@@ -63,4 +63,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     @Query("Select count(r)>0 from Rating  r where r.user.user_id=:id")
     boolean isExist(Long id);
+
+    @Query("Select r from Rating r where r.user.user_id=:id")
+    List<Rating> getUserActivity(Long id);
 }

@@ -1,14 +1,17 @@
 package ge.restaurant.repository;
 
 import ge.restaurant.dto.CommentDto;
+import ge.restaurant.models.AverageRating;
 import ge.restaurant.models.Rating;
 import ge.restaurant.models.Restaurant;
+import ge.restaurant.models.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
@@ -47,6 +50,17 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
             " AND e.user.user_id <> 1")
     int averageRatingRow(@Param("restaurant") Restaurant restaurant);
 
+    @Query("Select r from AverageRating  r order by r.averageRating desc limit 10")
+    List<AverageRating> getTopTen();
+
     @Query("select new ge.restaurant.dto.CommentDto(e.comment,e.user)from Rating e where e.restaurant=:restaurant and e.comment is not null ")
     List<CommentDto> findCommentsByRestaurant(@Param("restaurant") Restaurant restaurant);
+
+    @Query("Select r.user.user_id," +
+            "r.restaurant.restaurant_id,r.generalRating" +
+            " from Rating r where r.comment is  null ")
+    List<Object[]> allUserRating();
+
+    @Query("Select count(r)>0 from Rating  r where r.user.user_id=:id")
+    boolean isExist(Long id);
 }

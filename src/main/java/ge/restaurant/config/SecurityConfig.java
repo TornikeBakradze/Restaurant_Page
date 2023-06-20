@@ -76,6 +76,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/**").permitAll();
                     auth.requestMatchers("/image/**").permitAll();
+                    auth.requestMatchers("/home/**").permitAll();
+                    auth.requestMatchers("/typeAndDistrict/**").permitAll();
                     auth.requestMatchers("/restaurant/**").permitAll();
                     auth.requestMatchers("/restaurant/{restaurantUrl}/comm").authenticated();
                     auth.requestMatchers("/restaurant/{restaurantUrl}/rating").authenticated();

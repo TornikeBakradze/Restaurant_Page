@@ -1,32 +1,26 @@
 package ge.restaurant.impl;
 
-import ge.restaurant.dto.CommentDto;
-import ge.restaurant.dto.EachRestaurantFullInfoDto;
-import ge.restaurant.dto.RestaurantDto;
-import ge.restaurant.dto.RestaurantMainDto;
+import ge.restaurant.dto.*;
 import ge.restaurant.exception.DataAlreadyExistException;
 import ge.restaurant.models.*;
 import ge.restaurant.repository.*;
+import ge.restaurant.service.RecommendationService;
 import ge.restaurant.service.RegistrationService;
 import ge.restaurant.service.RestaurantService;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 @Transactional
 public class RestaurantImpl implements RestaurantService {
     @Autowired
     private RestaurantRepository restaurantRepository;
-
     @Autowired
     private RegistrationService registrationService;
-
     @Autowired
     private RatingRepository ratingRepository;
     @Autowired
@@ -35,6 +29,10 @@ public class RestaurantImpl implements RestaurantService {
     private MenuRepository menuRepository;
     @Autowired
     private AverageRatingRepository averageRatingRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private RecommendationService recommendationService;
 
 
     @Override
@@ -69,6 +67,12 @@ public class RestaurantImpl implements RestaurantService {
         Set<String> allUniqueTypes = restaurantRepository.findAllUniqueTypes();
         Set<String> allUniqueDistrict = restaurantRepository.getAllUniqueDistinct();
         return new RestaurantMainDto(allRestaurantWithAverageRating, allUniqueTypes, allUniqueDistrict);
+    }
+
+    public TypeAndDistrict getAllTypeAndDistrict(){
+        Set<String> allUniqueTypes = restaurantRepository.findAllUniqueTypes();
+        Set<String> allUniqueDistrict = restaurantRepository.getAllUniqueDistinct();
+        return new TypeAndDistrict(allUniqueTypes,allUniqueDistrict);
     }
 
     public List<AverageRating> getRestaurantByType(Set<String> type) {
@@ -116,6 +120,28 @@ public class RestaurantImpl implements RestaurantService {
         List<Menu_Items> menuByRestaurant = menuRepository.getMenuByRestaurant(restaurant);
         AverageRating restaurantAverageRating = averageRatingRepository.findByRestaurant(restaurant);
         return new EachRestaurantFullInfoDto(restaurantAverageRating, menuByRestaurant, commentsByRestaurant);
+    }
+
+    public TopTen  getPopularAndTopRatingRestaurant(){
+        List<AverageRating> topTenByRating = ratingRepository.getTopTen();
+        List<AverageRating> topTenByBooking = bookingRepository.getTopTen();
+        return new TopTen(topTenByRating,topTenByBooking);
+    }
+
+    public Set<AverageRating> getRecommendedRestaurant(String id) throws IOException {
+        Long userID=Long.parseLong(id);
+        Optional<Users> byId = userRepository.findById(userID);
+        boolean exist = ratingRepository.isExist(userID);
+        if(byId.isPresent()&&exist){
+            List<Long> recommendation = recommendationService.Recommendation(userID);
+            return averageRatingRepository.recommended(recommendation);
+        }
+        List<AverageRating> topTenByRating = ratingRepository.getTopTen();
+        List<AverageRating> topTenByBooking = bookingRepository.getTopTen();
+        Set<AverageRating> combinedSet = new TreeSet<>();
+        combinedSet.addAll(topTenByRating);
+        combinedSet.addAll(topTenByBooking);
+        return combinedSet;
     }
 
     public boolean iseExist(String email) {

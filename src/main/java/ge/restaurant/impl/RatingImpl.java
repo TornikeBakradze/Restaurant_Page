@@ -46,13 +46,13 @@ public class RatingImpl implements RatingService {
 
     public void AddRating(String restaurantName, Float serviceRating,
                           Float foodRating, Float priceRating,
-                          Float ambienceRating, Long id) {
+                          Float ambienceRating, Long id,String comment) {
         Restaurant restaurant = restaurantRepository.findByRestaurantUrl(restaurantName).get();
         Map<String, Float> updatedRating = restaurantGeneralRatingService
                 .updatedBasicRating(restaurant, foodRating, serviceRating,
                         ambienceRating, priceRating);
         Users user = userRepository.findById(id).get();
-        Rating rating1 = new Rating(restaurant, user, serviceRating, foodRating, priceRating, ambienceRating);
+        Rating rating1 = new Rating(restaurant, user, comment, serviceRating, foodRating, priceRating, ambienceRating);
         Float newAverageRating = newAverageRating(restaurant,rating1.getGeneralRating());
         averageRatingRepository
                 .updateAverageRatingsExceptAverageRating(updatedRating.get("ServiceRating"),

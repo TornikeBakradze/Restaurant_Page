@@ -6,20 +6,32 @@ public class BasicRatingDto {
     private Float foodRating;
     private Float priceRating;
     private Float ambienceRating;
+
+    private String comment;
     private Long userid;
 
     public BasicRatingDto() {
     }
 
     public BasicRatingDto(Float userGeneralRating, Float serviceRating,
-                          Float foodRating, Float priceRating, Float ambienceRating,
+                          Float foodRating, Float priceRating,
+                          Float ambienceRating, String comment,
                           Long userid) {
         this.userGeneralRating = userGeneralRating;
         this.serviceRating = serviceRating;
         this.foodRating = foodRating;
         this.priceRating = priceRating;
         this.ambienceRating = ambienceRating;
+        this.comment = comment;
         this.userid = userid;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Float getUserGeneralRating() {

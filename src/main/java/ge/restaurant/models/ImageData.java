@@ -26,10 +26,18 @@ public class ImageData {
 
     public ImageData(String name, String type, String filePath) {
         this.imageID = imageID;
-        this.url = "/image/" + name;
+        this.url = "/image/" + name.replaceAll("\\s","");
         this.name = name;
         this.type = type;
         this.filePath = filePath;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUrl() {

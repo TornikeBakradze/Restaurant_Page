@@ -23,9 +23,8 @@ public class MenuImpl {
     public void add(List<MenuDto> menuDto) throws DataAlreadyExistException {
         Restaurant restaurant = restaurantRepository.findById(menuDto.get(0).getRestaurantID()).get();
         for (MenuDto dto : menuDto) {
-            if(menuRepository.findByName(dto.getName())!=null)
+            if(menuRepository.findByNameAndID(dto.getName(),restaurant.getRestaurant_id())!=null)
                 throw new DataAlreadyExistException("This menu already exist");
-            ;
             Menu_Items menuItems = new Menu_Items(0L, dto.getName(),
                     dto.getDescription(), dto.getCategory(), dto.getPrice(), restaurant);
             menuRepository.save(menuItems);

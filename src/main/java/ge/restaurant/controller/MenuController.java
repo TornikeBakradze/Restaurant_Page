@@ -37,11 +37,11 @@ public class MenuController {
     }
 
     @PostMapping("/addMenu/uploadImage")
-    public ResponseEntity<?> uploadImage(@RequestParam("id") String id,
-                                         @RequestParam("name") String name,
-                                         @RequestParam("image")MultipartFile file) throws IOException {
-        Long l = Long.parseLong(id);
-        String uploadImage = image.uploadImage(l, name, file);
+    public ResponseEntity<?> uploadImage(@RequestParam("restaurantId") List<String> userId,
+                                         @RequestParam("foodName") List<String> foodName,
+                                         @RequestParam("image")List<MultipartFile> images) throws IOException {
+
+        String uploadImage = image.uploadImage(userId, foodName, images);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }

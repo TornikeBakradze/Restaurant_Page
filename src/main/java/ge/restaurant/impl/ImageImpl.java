@@ -1,5 +1,6 @@
 package ge.restaurant.impl;
 
+import ge.restaurant.dto.ManuImageUploaderDto;
 import ge.restaurant.models.ImageData;
 import ge.restaurant.models.Menu_Items;
 import ge.restaurant.models.Restaurant;
@@ -28,8 +29,7 @@ public class ImageImpl {
     private MenuRepository menuRepository;
 
 
-    private final String FOLDER_PATH = "C:/Users/DELL/Desktop/MyFile";
-
+    private final String FOLDER_PATH = "C:\\Users\\DELL\\Desktop\\MyFile";
     public String uploadImageToFileSystem(List<MultipartFile> files,Long id) throws IOException {
         Restaurant restaurant = restaurant(id);
         for (MultipartFile file : files) {
@@ -55,16 +55,21 @@ public class ImageImpl {
     }
 
 
-    public String uploadImage(Long l, String name, MultipartFile file) throws IOException {
-        Menu_Items menuItems = menuRepository.findByNameAndID(name, l);
-        UUID uuid=UUID.randomUUID();
-        String imageName=uuid+"_"+file.getOriginalFilename();
-        String filePath = FOLDER_PATH +"/"+ name;
-        ImageData imageData = new ImageData(imageName,
-                file.getContentType(), filePath);
-        menuItems.setImageData(imageData);
-        menuRepository.save(menuItems);
-        file.transferTo(new File(filePath));
+    public String uploadImage(List<String> id,List<String> foodName,List<MultipartFile> file) throws IOException {
+        for (int i = 0; i < id.size(); i++) {
+            Long l=Long.parseLong(id.get(i));
+            String name=foodName.get(i);
+            MultipartFile image=file.get(i);
+            Menu_Items menuItems = menuRepository.findByNameAndID(name, l);
+            UUID uuid=UUID.randomUUID();
+            String imageName=uuid+"_"+image.getOriginalFilename().replaceAll("\\s","");
+            String filePath = FOLDER_PATH +"/"+ imageName;
+            ImageData imageData = new ImageData(imageName,
+                    image.getContentType(), filePath);
+            menuItems.setImageData(imageData);
+            menuRepository.save(menuItems);
+            image.transferTo(new File(filePath));
+        }
         return "Image upload successfully";
     }
 

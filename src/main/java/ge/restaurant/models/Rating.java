@@ -56,11 +56,12 @@ public class Rating {
         this.comment = comment;
     }
 
-    public Rating(Restaurant restaurant, Users user,
+    public Rating(Restaurant restaurant, Users user,String comment,
                   Float serviceRating, Float foodRating,
                   Float priceRating, Float ambienceRating) {
         this.restaurant = restaurant;
         this.user = user;
+        this.comment=comment;
         this.generalRating=(serviceRating+foodRating+priceRating+ambienceRating)/4;
         this.serviceRating = serviceRating;
         this.foodRating = foodRating;

@@ -55,16 +55,12 @@ public class SecurityConfig {
             @Qualifier("userDetailsService") UserDetailsService userDetailsService,
             @Qualifier("restaurantDetailsService") UserDetailsService restaurantDetailsService) {
         DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
-
         daoProvider.setUserDetailsService(userDetailsService);
         daoProvider.setPasswordEncoder(passwordEncoder());
-
         DaoAuthenticationProvider restaurantDaoProvider = new DaoAuthenticationProvider();
         restaurantDaoProvider.setUserDetailsService(restaurantDetailsService);
         restaurantDaoProvider.setPasswordEncoder(passwordEncoder());
-
         ProviderManager providerManager = new ProviderManager(Arrays.asList(daoProvider, restaurantDaoProvider));
-
         return providerManager;
     }
 

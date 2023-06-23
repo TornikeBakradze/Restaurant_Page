@@ -22,13 +22,6 @@ public class RatingController {
 
     @Autowired
     private RatingImpl ratingImpl;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RestaurantRepository restaurantRepository;
-    @Autowired
-    private RatingRepository ratingRepository;
-
 
     @PostMapping("/{restaurantUrl}/rating")
     public void addRating(@PathVariable("restaurantUrl") String restaurantUrl,
@@ -36,17 +29,7 @@ public class RatingController {
         for (BasicRatingDto basicRatingDto : basicRatingDtos) {
             ratingImpl.AddRating(restaurantUrl, basicRatingDto.getServiceRating(),
                     basicRatingDto.getFoodRating(), basicRatingDto.getPriceRating(),
-                    basicRatingDto.getAmbienceRating(), basicRatingDto.getUserid());
+                    basicRatingDto.getAmbienceRating(), basicRatingDto.getUserid(),basicRatingDto.getComment());
         }
-
     }
-
-    @PostMapping("/{restaurantUrl}/comm")
-    public void addComme(@PathVariable("restaurantUrl") String restaurantUrl, @RequestBody AddCommentDto addCommentDto) {
-        Restaurant restaurant = restaurantRepository.findByRestaurantUrl(restaurantUrl).get();
-        Users users = userRepository.findById(addCommentDto.getUserId()).get();
-        ratingRepository.save(new Rating(restaurant, users, addCommentDto.getComment()));
-    }
-
-
 }

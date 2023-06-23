@@ -53,8 +53,9 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     @Query("Select r from AverageRating  r order by r.averageRating desc limit 10")
     List<AverageRating> getTopTen();
 
-    @Query("select new ge.restaurant.dto.CommentDto(e.comment,e.user)from Rating e where e.restaurant=:restaurant and e.comment is not null ")
+    @Query("select new ge.restaurant.dto.CommentDto(e.comment,e.user,e.generalRating)from Rating e where e.restaurant=:restaurant and e.comment is not null ")
     List<CommentDto> findCommentsByRestaurant(@Param("restaurant") Restaurant restaurant);
+
 
     @Query("Select r.user.user_id," +
             "r.restaurant.restaurant_id,r.generalRating" +

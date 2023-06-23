@@ -8,7 +8,7 @@ import java.util.List;
 public class EachRestaurantFullInfoDto {
     private AverageRating averageRating;
     private List<Menu_Items> menuItemsList;
-    private List<CommentDto> comment;
+    private List<CommentDto> commentAndRating;
 
     public EachRestaurantFullInfoDto() {
     }
@@ -17,7 +17,7 @@ public class EachRestaurantFullInfoDto {
                                      List<CommentDto> comment) {
         this.averageRating = averageRating;
         this.menuItemsList = menuItemsList;
-        this.comment = comment;
+        this.commentAndRating = comment;
     }
 
     public AverageRating getAverageRating() {
@@ -37,10 +37,10 @@ public class EachRestaurantFullInfoDto {
     }
 
     public List<CommentDto> getComment() {
-        return comment;
+        return commentAndRating;
     }
 
     public void setComment(List<CommentDto> comment) {
-        this.comment = comment;
+        this.commentAndRating = comment;
     }
 }

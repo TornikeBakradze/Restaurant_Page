@@ -5,13 +5,23 @@ import ge.restaurant.models.Users;
 public class CommentDto {
     private String comment;
     private Users users;
+    private Float generalRating;
 
     public CommentDto() {
     }
 
-    public CommentDto(String comment, Users users) {
+    public CommentDto(String comment, Users users, Float generalRating) {
         this.comment = comment;
         this.users = users;
+        this.generalRating = generalRating;
+    }
+
+    public Float getGeneralRating() {
+        return generalRating;
+    }
+
+    public void setGeneralRating(Float generalRating) {
+        this.generalRating = generalRating;
     }
 
     public String getComment() {

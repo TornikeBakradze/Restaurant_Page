@@ -59,8 +59,6 @@ public class UserImpl implements UserService {
             users.setEmail(userDto.getEmail());
             users.setLastname(userDto.getLastname());
             users.setPhoneNumber(userDto.getPhoneNumber());
-            String encPass=registrationService.encodePassword(userDto.getPassword());
-            users.setPassword(encPass);
             Set<Addresses> addressesSet =
                     registrationService.addresses
                             (userDto.getStreet(), userDto.getStreetNumber(),userDto.getDistrict());

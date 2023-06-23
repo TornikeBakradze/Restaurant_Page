@@ -16,6 +16,22 @@ public class UserDto {
     public UserDto() {
     }
 
+    public UserDto(Long id, String email,
+                   String userName, String lastname,
+                   String phoneNumber, String street,
+                   String streetNumber, String district,
+                   String role) {
+        this.id = id;
+        this.email = email;
+        this.userName = userName;
+        this.lastname = lastname;
+        this.phoneNumber = phoneNumber;
+        this.street = street;
+        this.streetNumber = streetNumber;
+        this.district = district;
+        this.role = role;
+    }
+
     public UserDto(Long id, String email, String userName, String lastname, String password, String phoneNumber, String street, String streetNumber, String district, String role) {
         this.id = id;
         this.email = email;

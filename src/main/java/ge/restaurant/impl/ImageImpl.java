@@ -34,7 +34,7 @@ public class ImageImpl {
         Restaurant restaurant = restaurant(id);
         for (MultipartFile file : files) {
             UUID uuid=UUID.randomUUID();
-            String name=uuid+"_"+file.getOriginalFilename();
+            String name=uuid+"_"+file.getOriginalFilename().replaceAll("[()\\s]", "");
 
             String filePath = FOLDER_PATH +"/"+ name;
 
@@ -62,7 +62,7 @@ public class ImageImpl {
             MultipartFile image=file.get(i);
             Menu_Items menuItems = menuRepository.findByNameAndID(name, l);
             UUID uuid=UUID.randomUUID();
-            String imageName=uuid+"_"+image.getOriginalFilename().replaceAll("\\s","");
+            String imageName=uuid+"_"+image.getOriginalFilename().replaceAll("[()\\s]", "");
             String filePath = FOLDER_PATH +"/"+ imageName;
             ImageData imageData = new ImageData(imageName,
                     image.getContentType(), filePath);

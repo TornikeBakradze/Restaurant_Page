@@ -44,7 +44,7 @@ public class ImageImpl {
 
         for (MultipartFile file : files) {
             UUID uuid = UUID.randomUUID();
-            String name = uuid + "_" + file.getOriginalFilename();
+            String name = uuid + "_" + file.getOriginalFilename().replaceAll("[()\\s]", "");
 
             String filePath = folderPath + File.separator + name;
 
@@ -82,7 +82,7 @@ public class ImageImpl {
             Menu_Items menuItems = menuRepository.findByNameAndID(name, l);
 
             UUID uuid = UUID.randomUUID();
-            String imageName = uuid + "_" + file.getOriginalFilename().replaceAll("\\s", "");
+            String imageName = uuid + "_" + file.getOriginalFilename().replaceAll("[()\\s]", "");
 
             String folderPath = ResourceUtils.getFile("classpath:assets/images").getAbsolutePath();
             String filePath = folderPath + File.separator + imageName;

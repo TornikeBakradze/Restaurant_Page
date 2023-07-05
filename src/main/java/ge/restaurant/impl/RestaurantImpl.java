@@ -128,23 +128,24 @@ public class RestaurantImpl implements RestaurantService {
     public TopTen  getPopularAndTopRatingRestaurant(){
         List<AverageRating> topTenByRating = ratingRepository.getTopTen();
         List<AverageRating> topTenByBooking = bookingRepository.getTopTen();
-        return new TopTen(topTenByRating,topTenByBooking);
+        return new TopTen(topTenByRating,topTenByBooking, null);
     }
 
-    public Set<AverageRating> getRecommendedRestaurant(String id) throws IOException {
+    public TopTen getRecommendedRestaurant(String id) throws IOException {
         Long userID=Long.parseLong(id);
         Optional<Users> byId = userRepository.findById(userID);
         boolean exist = ratingRepository.isExist(userID);
+        List<AverageRating> topTenByRating = ratingRepository.getTopTen();
         if(byId.isPresent()&&exist){
             List<Long> recommendation = recommendationService.Recommendation(userID);
-            return averageRatingRepository.recommended(recommendation);
+
+            return new TopTen(topTenByRating,null, averageRatingRepository.recommended(recommendation));
         }
-        List<AverageRating> topTenByRating = ratingRepository.getTopTen();
         List<AverageRating> topTenByBooking = bookingRepository.getTopTen();
         Set<AverageRating> combinedSet = new TreeSet<>();
         combinedSet.addAll(topTenByRating);
         combinedSet.addAll(topTenByBooking);
-        return combinedSet;
+        return new TopTen(topTenByRating,topTenByBooking, null);
     }
 
     public boolean iseExist(String email) {

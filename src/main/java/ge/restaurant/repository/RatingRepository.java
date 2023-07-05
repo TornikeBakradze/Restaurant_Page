@@ -42,7 +42,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     Float averageServiceRating(@Param("restaurant") Restaurant restaurant);
 
 
-    @Query("SELECT COUNT(e) FROM Rating e WHERE e.comment IS NULL AND e.restaurant = :restaurant AND e.user.user_id <> 1")
+    @Query("SELECT COUNT(e) FROM Rating e WHERE e.restaurant = :restaurant AND e.user.user_id <> 1")
     int countRowsWithCommentNullAndUserIdNotOne(@Param("restaurant") Restaurant restaurant);
 
     @Query("SELECT count(e) FROM Rating e WHERE e.restaurant = :restaurant" +
@@ -59,7 +59,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     @Query("Select r.user.user_id," +
             "r.restaurant.restaurant_id,r.generalRating" +
-            " from Rating r where r.comment is  null ")
+            " from Rating r")
     List<Object[]> allUserRating();
 
     @Query("Select count(r)>0 from Rating  r where r.user.user_id=:id")
